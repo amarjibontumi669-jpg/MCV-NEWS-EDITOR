@@ -2,89 +2,418 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCV - Mobile Editor</title>
-    <!-- ফেভিকন লোগো (আপনার দেওয়া লিংক) -->
-    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/DH17r5rg/1000021545.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>MCV NEWS EDITOR</title>
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/0VX28C2R/1000021550.png">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Hind Siliguri', sans-serif;
-            /* নতুন প্রিমিয়াম ব্যাকগ্রাউন্ড কালার */
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            margin: 0;
-            padding: 10px;
-            padding-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #000000;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* --- Editor Tools (নতুন কালার স্কিম) --- */
-        .tools-container {
-            background: linear-gradient(145deg, #2d2d44 0%, #1e1e2f 100%);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
+        /* ==== অরোরা ব্যাকগ্রাউন্ড ==== */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 550px;
+            height: 100%;
+            z-index: -2;
+            background: #0a0a0f;
+        }
+
+        .aurora {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 128, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 215, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 10%, rgba(147, 51, 234, 0.3) 0%, transparent 50%);
+            filter: blur(100px);
+            animation: auroraMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes auroraMove {
+            0% { transform: translate(-10%, -10%) rotate(0deg); }
+            100% { transform: translate(10%, 10%) rotate(10deg); }
+        }
+
+        /* ==== ফ্লোটিং পার্টিকেলস ==== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ==== মেইন কন্টেইনার ==== */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        /* ==== হেডার ==== */
+        .app-header {
+            text-align: center;
             margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            box-sizing: border-box;
-            border: 1px solid #3a3a5a;
+            animation: slideDown 0.8s ease-out;
         }
 
-        /* ট্যাবলেট বা বড় স্ক্রিনের জন্য ২ কলাম */
-        @media (min-width: 480px) {
-            .tools-container {
-                grid-template-columns: 1fr 1fr;
-            }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .tools-container h2 { 
-            grid-column: 1 / -1; 
-            margin: 0; 
-            color: #ff6b6b; 
-            text-align: center; 
-            font-size: 1.2rem;
-            text-shadow: 0 2px 10px rgba(255,107,107,0.3);
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4); }
+            50% { box-shadow: 0 12px 35px rgba(255, 190, 11, 0.5); }
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a8b2d1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             letter-spacing: 2px;
         }
 
-        .input-group { display: flex; flex-direction: column; }
-        label { 
-            font-size: 12px; 
-            font-weight: bold; 
-            margin-bottom: 4px; 
-            color: #a8b2d1; 
+        .app-subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        input, textarea, select { 
-            padding: 10px; 
-            border: 1px solid #3a3a5a; 
-            border-radius: 8px; 
-            font-family: inherit;
-            font-size: 14px;
-            background: #1a1a2e;
-            color: #e0e0ff;
-            transition: all 0.3s;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #ff6b6b;
-            box-shadow: 0 0 10px rgba(255,107,107,0.2);
-        }
-        input::placeholder, textarea::placeholder {
-            color: #6a6a8a;
         }
 
-        /* --- News Card (পুরো স্ক্রিন জুড়ে থাকবে - অপরিবর্তিত) --- */
+        /* ==== কুইক অ্যাকশন বার - সুন্দর করে সাজানো ==== */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.9);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-btn:hover {
+            background: linear-gradient(135deg, rgba(255,0,110,0.3), rgba(255,190,11,0.2));
+            border-color: rgba(255,0,110,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,0,110,0.2);
+        }
+
+        /* ==== ফিচার ট্যাব - সুন্দর করে সাজানো ==== */
+        .feature-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding: 5px 2px;
+            scrollbar-width: none;
+            justify-content: center;
+        }
+
+        .feature-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            flex: 0 1 auto;
+            min-width: 80px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(255,0,110,0.3);
+            transform: scale(1.05);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        /* ==== এডিটর কার্ড ==== */
+        .editor-card {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 20px 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.05);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .editor-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .editor-title i {
+            color: #ff006e;
+            font-style: normal;
+            font-size: 20px;
+        }
+
+        .input-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-field label {
+            color: rgba(255,255,255,0.7);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            color: white;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 20px;
+            font-weight: 700;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-field input,
+        .input-field textarea,
+        .input-field select {
+            background: rgba(0,0,0,0.3);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 12px 14px;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
+            resize: vertical;
+        }
+
+        .input-field input:focus,
+        .input-field textarea:focus,
+        .input-field select:focus {
+            border-color: #ff006e;
+            background: rgba(255,0,110,0.1);
+            box-shadow: 0 0 20px rgba(255,0,110,0.3);
+        }
+
+        .input-field input::placeholder,
+        .input-field textarea::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .file-upload {
+            position: relative;
+        }
+
+        .file-upload input {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-label {
+            background: linear-gradient(135deg, rgba(255,0,110,0.15), rgba(255,190,11,0.1));
+            border: 2px dashed rgba(255,255,255,0.25);
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-label:hover {
+            border-color: #ff006e;
+            background: rgba(255,0,110,0.2);
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .color-row input[type="color"] {
+            width: 50px;
+            height: 45px;
+            padding: 3px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .range-slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .range-slider input {
+            flex: 1;
+            padding: 0;
+        }
+
+        .range-value {
+            color: white;
+            min-width: 45px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .filter-preview {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 25px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,0,110,0.2);
+            border-color: #ff006e;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            border-color: transparent;
+        }
+
+        /* ===== অরিজিনাল নিউজ কার্ড ===== */
         #news-card {
             width: 100%;
             max-width: 550px;
@@ -92,8 +421,64 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,107,107,0.2);
-            border-radius: 8px 8px 0 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            margin: 0 auto 20px;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .watermark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.15;
+            font-size: 80px;
+            font-weight: 900;
+            color: #000;
+            transform: rotate(-30deg);
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .breaking-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff0000;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 50;
+            animation: blinkBadge 1s infinite;
+            display: none;
+        }
+
+        @keyframes blinkBadge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .live-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00ff00;
+            color: black;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 50;
+            display: none;
         }
 
         .main-photo {
@@ -103,15 +488,57 @@
             align-items: center;
             background-color: #ffffff;
             overflow: hidden;
+            position: relative;
         }
 
-        #m-img { transition: 0.3s; width: auto; height: auto; }
-        .mode-cover { width: 100% !important; height: 100% !important; object-fit: cover; }
-        .mode-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
+        #m-img { 
+            transition: 0.3s; 
+            width: auto; 
+            height: auto; 
+        }
 
-        .headline-box { background-color: #b30000; color: #fff; padding: 15px 10px; text-align: center; }
-        #h-text { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.2; }
-        .meta-text { background-color: #b30000; color: #ffcccc; text-align: right; padding: 0 15px 10px; font-size: 12px; }
+        .mode-cover { 
+            width: 100% !important; 
+            height: 100% !important; 
+            object-fit: cover; 
+        }
+
+        .mode-contain { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+        }
+
+        .sepia { filter: sepia(100%); }
+        .grayscale { filter: grayscale(100%); }
+        .brightness { filter: brightness(1.2); }
+        .contrast { filter: contrast(1.5); }
+        .blur { filter: blur(2px); }
+
+        .headline-box { 
+            background-color: #b30000; 
+            color: #fff; 
+            padding: 15px 10px; 
+            text-align: center; 
+            position: relative;
+        }
+
+        #h-text { 
+            margin: 0; 
+            font-size: 24px; 
+            font-weight: 700; 
+            line-height: 1.2; 
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .meta-text { 
+            background-color: #b30000; 
+            color: #ffcccc; 
+            text-align: right; 
+            padding: 0 15px 10px; 
+            font-size: 12px; 
+            font-family: 'Hind Siliguri', sans-serif;
+        }
 
         .brand-strip {
             background-color: #8b0000;
@@ -122,6 +549,7 @@
             justify-content: space-between;
             font-size: 11px;
             gap: 5px;
+            font-family: 'Hind Siliguri', sans-serif;
         }
 
         .footer-ad {
@@ -132,200 +560,643 @@
             border-top: 4px solid #005a32;
         }
 
-        .footer-logo { width: 80px; height: 40px; margin-right: 10px; display: flex; justify-content: center; align-items: center; }
-        #f-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .footer-logo { 
+            width: 80px; 
+            height: 40px; 
+            margin-right: 10px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
 
-        .footer-info { color: #005a32; font-size: 12px; line-height: 1.2; flex: 1; }
+        #f-img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+        }
 
-        /* Save Button - নতুন কালার */
-        .save-btn {
-            margin: 20px 0;
-            width: 100%;
+        .footer-info { 
+            color: #005a32; 
+            font-size: 12px; 
+            line-height: 1.2; 
+            flex: 1; 
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .view-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            z-index: 50;
+            display: none;
+        }
+
+        /* ==== অ্যাকশন বাটন - সুন্দর করে সাজানো ==== */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
             max-width: 550px;
-            padding: 16px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            color: #fff;
+            margin: 0 auto 20px;
+            padding: 0 5px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
             border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 50px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(238,90,36,0.4), inset 0 1px 1px rgba(255,255,255,0.3);
+            box-shadow: 0 10px 25px rgba(255,0,110,0.3);
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .save-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(238,90,36,0.5);
-        }
-
-        /* --- ডেভেলপার ক্রেডিট ও টেলিগ্রাম সেকশন (নতুন কালার) --- */
-        .dev-footer {
-            width: 100%;
-            max-width: 550px;
-            margin-top: 20px;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.3);
+        }
+
+        .action-btn.tertiary {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            box-shadow: 0 10px 25px rgba(0,180,219,0.3);
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255,0,110,0.4);
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn i {
+            font-style: normal;
+            font-size: 18px;
+        }
+
+        /* শেয়ার লিংক কন্টেইনার */
+        .share-link-container {
+            max-width: 550px;
+            margin: 0 auto 15px;
+            padding: 0 5px;
+            display: none;
+        }
+
+        .share-link-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 8px 8px 8px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+        }
+
+        .share-link-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 13px;
+            padding: 8px 0;
+            outline: none;
+        }
+
+        .share-link-box input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .copy-link-btn {
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            border: none;
+            border-radius: 40px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .copy-link-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ==== ফুটার ==== */
+        .app-footer {
             text-align: center;
-            gap: 12px;
+            margin-top: 15px;
         }
 
         .dev-credit {
-            font-size: 15px;
-            color: #e0e0ff;
-            font-weight: 600;
-            background: rgba(45,45,68,0.8);
-            padding: 10px 20px;
-            border-radius: 30px;
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid #4a4a6a;
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .dev-credit i {
-            color: #ff6b6b;
-            margin-right: 5px;
+        .dev-credit span {
+            background: linear-gradient(135deg, #ff006e, #ffbe0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 16px;
         }
 
-        .telegram-btn {
+        .telegram-link {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 10px;
-            background: linear-gradient(135deg, #0088cc 0%, #005f8c 100%);
-            color: white;
+            background: linear-gradient(135deg, #0088cc, #00a8ff);
+            padding: 14px 30px;
+            border-radius: 50px;
             text-decoration: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            font-weight: bold;
+            color: white;
+            font-weight: 600;
             font-size: 16px;
-            box-shadow: 0 6px 20px rgba(0,136,204,0.4);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 25px rgba(0,136,204,0.3);
+            transition: all 0.3s;
             border: 1px solid rgba(255,255,255,0.2);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .telegram-btn:hover {
+        .telegram-link:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,136,204,0.6);
-            background: linear-gradient(135deg, #0099e6 0%, #006699 100%);
+            box-shadow: 0 15px 30px rgba(0,136,204,0.5);
         }
 
-        .telegram-btn svg {
+        .telegram-link svg {
             width: 22px;
             height: 22px;
             fill: white;
         }
+
+        /* ট্যাব কন্টেন্ট */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ==== রেস্পন্সিভ ==== */
+        @media (max-width: 480px) {
+            .main-wrapper {
+                padding: 15px 10px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+            
+            .editor-card {
+                padding: 18px 14px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+            
+            .quick-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+        }
+
+        @media (min-width: 481px) {
+            .input-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* নোটিফিকেশন */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,184,148,0.3);
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
     </style>
 </head>
 <body>
-
-    <div class="tools-container">
-        <h2>⚡ MCV NEWS EDITOR ⚡</h2>
-        
-        <div class="input-group" style="grid-column: 1 / -1;">
-            <label>হেডলাইন:</label>
-            <textarea id="in-h" rows="2" oninput="sync()">MCV সাইবার যোদ্ধা</textarea>
-        </div>
-
-        <div class="input-group">
-            <label>চ্যানেল নাম:</label>
-            <input type="text" id="in-brand" value="🔴 MCV | tv" oninput="sync()">
-        </div>
-        <div class="input-group">
-            <label>তারিখ:</label>
-            <input type="text" id="in-d" value="১০ মার্চ ২০২৭" oninput="sync()">
-        </div>
-        <div class="input-group">
-            <label>ওয়েবসাইট:</label>
-            <input type="text" id="in-web" value="www.MCV.com" oninput="sync()">
-        </div>
-        <div class="input-group">
-            <label>সোশ্যাল আইডি:</label>
-            <input type="text" id="in-social" value="▶ MCV_official" oninput="sync()">
-        </div>
-
-        <div class="input-group">
-            <label>মেইন ফটো:</label>
-            <input type="file" id="up-m" accept="image/*" onchange="loadM(event)">
-        </div>
-
-        <div class="input-group">
-            <label>নিচের ফটো:</label>
-            <input type="file" id="up-f" accept="image/*" onchange="loadF(event)">
-        </div>
-
-        <div class="input-group">
-            <label>ফটো মোড:</label>
-            <select id="in-mode" onchange="sync()">
-                <option value="mode-contain">সেন্টার ফিট</option>
-                <option value="mode-cover" selected>ফুল ফ্রেম</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label>ব্যাকগ্রাউন্ড:</label>
-            <input type="color" id="in-bg" value="#ffffff" oninput="sync()">
-        </div>
-
-        <div class="input-group">
-            <label>টাইটেল:</label>
-            <input type="text" id="in-ad1" value="সাইবার নিরাপত্তা নিশ্চিত করুন" oninput="sync()">
-        </div>
-
-        <div class="input-group">
-            <label>ডেসক্রিপশন:</label>
-            <input type="text" id="in-ad2" value="MCV সবসময় আপনার পাশে আছে।" oninput="sync()">
-        </div>
+    <div class="aurora-container">
+        <div class="aurora"></div>
     </div>
 
-    <div id="news-card">
-        <div class="main-photo" id="bg-layer">
-            <img id="m-img" src="" class="mode-cover" style="display:none;">
-        </div>
-        <div class="headline-box">
-            <h1 id="h-text">MCV সাইবার যোদ্ধা</h1>
-        </div>
-        <div class="meta-text" id="d-text">৯ মার্চ ২০২৬</div>
-        
-        <div class="brand-strip">
-            <div id="brand-text">🔴 MCV | tv</div>
-            <div id="web-text">www.MCV.com</div>
-            <div id="social-text">▶ MCV_official</div>
-        </div>
+    <div class="particles" id="particles"></div>
 
-        <div class="footer-ad">
-            <div class="footer-logo">
-                <img id="f-img" src="" style="display:none;">
+    <div class="main-wrapper">
+        <div class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">MCV NEWS EDITOR</div>
             </div>
-            <div class="footer-info">
-                <b id="ad1-text">সাইবার নিরাপত্তা নিশ্চিত করুন</b><br>
-                <span id="ad2-text">MCV সবসময় আপনার পাশে আছে।</span>
+            <div class="app-subtitle"> MIRJAPUR CYBER VENOM</div>
+        </div>
+
+        <!-- কুইক অ্যাকশন - সুন্দর করে সাজানো -->
+        <div class="quick-actions">
+            <div class="quick-btn" onclick="applyTemplate('breaking')">
+                <span>🚨</span> ব্রেকিং
+            </div>
+            <div class="quick-btn" onclick="applyTemplate('live')">
+                <span>🔴</span> লাইভ
+            </div>
+            <div class="quick-btn" onclick="applyTemplate('exclusive')">
+                <span>⭐</span> এক্সক্লুসিভ
+            </div>
+            <div class="quick-btn" onclick="resetAll()">
+                <span>🔄</span> রিসেট
             </div>
         </div>
-    </div>
 
-    <button class="save-btn" onclick="download4K()">সরাসরি ৪কে সেভ করুন</button>
-
-    <!-- ডেভেলপার ক্রেডিট এবং টেলিগ্রাম জয়েন বাটন -->
-    <div class="dev-footer">
-        <div class="dev-credit">
-            <i>🔥</i> ডেভেলপার: Black Herix <i>🔥</i>
+        <!-- ফিচার ট্যাব - সুন্দর করে সাজানো -->
+        <div class="feature-tabs">
+            <div class="tab-btn active" onclick="switchTab('basic')">
+                <span>📋</span> বেসিক
+            </div>
+            <div class="tab-btn" onclick="switchTab('advanced')">
+                <span>🎨</span> অ্যাডভান্সড
+            </div>
+            <div class="tab-btn" onclick="switchTab('effects')">
+                <span>✨</span> ইফেক্টস
+            </div>
+            <div class="tab-btn" onclick="switchTab('branding')">
+                <span>🏷️</span> ব্র্যান্ডিং
+            </div>
         </div>
-        <a href="https://t.me/+VsN_05q2cUJmNDA9" target="_blank" class="telegram-btn">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.57-1.37-.93-2.22-1.49-.98-.65-.34-1.01.21-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.05-.2-.06-.06-.15-.04-.22-.02-.09.02-1.55.99-4.37 2.89-.41.28-.79.42-1.12.41-.37-.01-1.08-.21-1.61-.38-.65-.21-1.17-.33-1.12-.69.02-.19.28-.38.78-.58 3.04-1.32 5.07-2.19 6.09-2.61 2.9-1.21 3.5-1.42 3.89-1.42.09 0 .28.02.41.12.11.09.14.21.15.3.01.09.02.28 0 .44z"/>
-            </svg>
-            জয়েন টেলিগ্রাম চ্যানেল
-        </a>
+
+        <!-- ট্যাব কন্টেন্টগুলো আগের মতোই আছে -->
+        <div class="tab-content active" id="basic-tab">
+            <div class="editor-card">
+                <div class="editor-title">
+                    <i>📋</i> বেসিক সেটিংস
+                </div>
+                
+                <div class="input-grid">
+                    <div class="input-field full-width">
+                        <label>📰 হেডলাইন</label>
+                        <textarea id="in-h" rows="2" oninput="sync()">MCV সাইবার যোদ্ধা</textarea>
+                    </div>
+
+                    <div class="input-field">
+                        <label>📺 চ্যানেল</label>
+                        <input type="text" id="in-brand" value="🔴 MCV | tv" oninput="sync()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>📅 তারিখ</label>
+                        <input type="text" id="in-d" value="১০ মার্চ ২০২৭" oninput="sync()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>🌐 ওয়েবসাইট</label>
+                        <input type="text" id="in-web" value="www.MCV.com" oninput="sync()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>📱 সোশ্যাল</label>
+                        <input type="text" id="in-social" value="▶ MCV_official" oninput="sync()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>🖼️ মেইন ফটো</label>
+                        <div class="file-upload">
+                            <input type="file" id="up-m" accept="image/*" onchange="loadM(event)">
+                            <div class="file-label">📸 ছবি সিলেক্ট</div>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🖼️ ফুটার লোগো</label>
+                        <div class="file-upload">
+                            <input type="file" id="up-f" accept="image/*" onchange="loadF(event)">
+                            <div class="file-label">🎯 লোগো সিলেক্ট</div>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🎨 ফটো মোড</label>
+                        <select id="in-mode" onchange="sync()">
+                            <option value="mode-contain">সেন্টার ফিট</option>
+                            <option value="mode-cover" selected>ফুল ফ্রেম</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🎨 ব্যাকগ্রাউন্ড</label>
+                        <div class="color-row">
+                            <input type="color" id="in-bg" value="#ffffff" oninput="sync()">
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>📌 ফুটার টাইটেল</label>
+                        <input type="text" id="in-ad1" value="সাইবার নিরাপত্তা নিশ্চিত করুন" oninput="sync()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>📝 ফুটার ডেসক্রিপশন</label>
+                        <input type="text" id="in-ad2" value="MCV সবসময় আপনার পাশে আছে।" oninput="sync()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- অন্যান্য ট্যাব কন্টেন্ট (আগের মতোই) -->
+        <div class="tab-content" id="advanced-tab">
+            <div class="editor-card">
+                <div class="editor-title">
+                    <i>🎨</i> অ্যাডভান্সড ফিচার
+                </div>
+                
+                <div class="input-grid">
+                    <div class="input-field full-width">
+                        <label>📏 হেডলাইন সাইজ <span class="new-badge">নতুন</span></label>
+                        <div class="range-slider">
+                            <input type="range" id="font-size" min="16" max="40" value="24" oninput="updateFontSize()">
+                            <span class="range-value" id="font-size-value">24px</span>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🎨 হেডলাইন কালার <span class="new-badge">নতুন</span></label>
+                        <input type="color" id="headline-color" value="#b30000" oninput="updateHeadlineColor()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>🎨 ব্র্যান্ড কালার <span class="new-badge">নতুন</span></label>
+                        <input type="color" id="brand-color" value="#8b0000" oninput="updateBrandColor()">
+                    </div>
+
+                    <div class="input-field full-width">
+                        <label>🌈 ইমেজ ফিল্টার <span class="new-badge">নতুন</span></label>
+                        <div class="filter-preview">
+                            <div class="filter-btn" onclick="applyFilter('normal')">নরমাল</div>
+                            <div class="filter-btn" onclick="applyFilter('sepia')">সেপিয়া</div>
+                            <div class="filter-btn" onclick="applyFilter('grayscale')">গ্রেস্কেল</div>
+                            <div class="filter-btn" onclick="applyFilter('brightness')">ব্রাইট</div>
+                            <div class="filter-btn" onclick="applyFilter('contrast')">কনট্রাস্ট</div>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🔄 ইমেজ রোটেট <span class="new-badge">নতুন</span></label>
+                        <select id="rotation" onchange="rotateImage()">
+                            <option value="0">0°</option>
+                            <option value="90">90°</option>
+                            <option value="180">180°</option>
+                            <option value="270">270°</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🔍 ইমেজ জুম <span class="new-badge">নতুন</span></label>
+                        <div class="range-slider">
+                            <input type="range" id="zoom" min="100" max="200" value="100" oninput="zoomImage()">
+                            <span class="range-value" id="zoom-value">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="effects-tab">
+            <div class="editor-card">
+                <div class="editor-title">
+                    <i>✨</i> স্পেশাল ইফেক্টস
+                </div>
+                
+                <div class="input-grid">
+                    <div class="input-field full-width">
+                        <label>💧 ওয়াটারমার্ক <span class="new-badge">নতুন</span></label>
+                        <input type="text" id="watermark-text" placeholder="ওয়াটারমার্ক টেক্সট" oninput="updateWatermark()">
+                        <div class="range-slider">
+                            <input type="range" id="watermark-opacity" min="0" max="30" value="15" oninput="updateWatermark()">
+                            <span class="range-value" id="watermark-opacity-value">15%</span>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🚨 ব্রেকিং নিউজ <span class="new-badge">নতুন</span></label>
+                        <select id="breaking-badge" onchange="toggleBreakingBadge()">
+                            <option value="none">বন্ধ</option>
+                            <option value="breaking">ব্রেকিং নিউজ</option>
+                            <option value="exclusive">এক্সক্লুসিভ</option>
+                            <option value="alert">অ্যালার্ট</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🔴 লাইভ ট্যাগ <span class="new-badge">নতুন</span></label>
+                        <select id="live-tag" onchange="toggleLiveTag()">
+                            <option value="none">বন্ধ</option>
+                            <option value="live">🔴 LIVE</option>
+                            <option value="recording">⏺️ REC</option>
+                            <option value="streaming">📡 STREAMING</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field">
+                        <label>🌑 টেক্সট শ্যাডো <span class="new-badge">নতুন</span></label>
+                        <select id="text-shadow" onchange="applyTextShadow()">
+                            <option value="none">বন্ধ</option>
+                            <option value="soft">সফট</option>
+                            <option value="hard">হার্ড</option>
+                            <option value="glow">গ্লো</option>
+                        </select>
+                    </div>
+
+                    <div class="input-field">
+                        <label>📐 বর্ডার স্টাইল <span class="new-badge">নতুন</span></label>
+                        <select id="border-style" onchange="applyBorderStyle()">
+                            <option value="none">বন্ধ</option>
+                            <option value="solid">সলিড</option>
+                            <option value="double">ডাবল</option>
+                            <option value="glow">গ্লো</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="branding-tab">
+            <div class="editor-card">
+                <div class="editor-title">
+                    <i>🏷️</i> ব্র্যান্ডিং ও মেটা
+                </div>
+                
+                <div class="input-grid">
+                    <div class="input-field">
+                        <label>👁️ ভিউ কাউন্ট <span class="new-badge">নতুন</span></label>
+                        <input type="text" id="view-count" placeholder="যেমন: ২.৫M views" oninput="updateViewCount()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>🏷️ ক্যাটাগরি <span class="new-badge">নতুন</span></label>
+                        <input type="text" id="category-tag" placeholder="যেমন: #Technology" oninput="updateCategory()">
+                    </div>
+
+                    <div class="input-field">
+                        <label>📍 লোকেশন <span class="new-badge">নতুন</span></label>
+                        <input type="text" id="location" placeholder="যেমন: ঢাকা, বাংলাদেশ" oninput="updateLocation()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- নিউজ কার্ড -->
+        <div id="news-card">
+            <div class="watermark-overlay" id="watermark"></div>
+            <div class="breaking-badge" id="breakingBadge">🚨 BREAKING NEWS</div>
+            <div class="live-tag" id="liveTag">🔴 LIVE</div>
+            <div class="view-counter" id="viewCounter">👁️ ১.২M views</div>
+            
+            <div class="main-photo" id="bg-layer">
+                <img id="m-img" src="" class="mode-cover" style="display:none;">
+            </div>
+            <div class="headline-box" id="headlineBox">
+                <h1 id="h-text">MCV সাইবার যোদ্ধা</h1>
+            </div>
+            <div class="meta-text" id="d-text">৯ মার্চ ২০২৬</div>
+            
+            <div class="brand-strip" id="brandStrip">
+                <div id="brand-text">🔴 MCV | tv</div>
+                <div id="web-text">www.MCV.com</div>
+                <div id="social-text">▶ MCV_official</div>
+            </div>
+
+            <div class="footer-ad">
+                <div class="footer-logo">
+                    <img id="f-img" src="" style="display:none;">
+                </div>
+                <div class="footer-info">
+                    <b id="ad1-text">সাইবার নিরাপত্তা নিশ্চিত করুন</b><br>
+                    <span id="ad2-text">MCV সবসময় আপনার পাশে আছে।</span>
+                    <div id="extra-info" style="margin-top:5px; font-size:10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- শেয়ার লিংক কন্টেইনার -->
+        <div class="share-link-container" id="shareLinkContainer">
+            <div class="share-link-box">
+                <input type="text" id="shareLinkInput" readonly placeholder="শেয়ার লিংক জেনারেট হচ্ছে...">
+                <button class="copy-link-btn" onclick="copyShareLink()">📋 কপি</button>
+            </div>
+        </div>
+
+        <!-- অ্যাকশন বাটন - সুন্দর করে সাজানো -->
+        <div class="action-buttons">
+            <button class="action-btn" onclick="download4K()">
+                <i>💾</i> ৪কে সেভ
+            </button>
+            <button class="action-btn secondary" onclick="generateShareLink()">
+                <i>🔗</i> শেয়ার
+            </button>
+            <button class="action-btn tertiary" onclick="copyToClipboard()">
+                <i>📋</i> কপি
+            </button>
+        </div>
+
+        <!-- ফুটার -->
+        <div class="app-footer">
+            <div class="dev-credit">
+                <span>🔥 ডেভেলপার: Black Herix 🔥</span>
+            </div>
+            <a href="https://t.me/+VsN_05q2cUJmNDA9" target="_blank" class="telegram-link">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.57-1.37-.93-2.22-1.49-.98-.65-.34-1.01.21-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.05-.2-.06-.06-.15-.04-.22-.02-.09.02-1.55.99-4.37 2.89-.41.28-.79.42-1.12.41-.37-.01-1.08-.21-1.61-.38-.65-.21-1.17-.33-1.12-.69.02-.19.28-.38.78-.58 3.04-1.32 5.07-2.19 6.09-2.61 2.9-1.21 3.5-1.42 3.89-1.42.09 0 .28.02.41.12.11.09.14.21.15.3.01.09.02.28 0 .44z"/>
+                </svg>
+                জয়েন টেলিগ্রাম চ্যানেল
+            </a>
+        </div>
     </div>
 
     <script>
-        // আপনার আগের সব জাভাস্ক্রিপ্ট ফাংশন এখানে ঠিকভাবে কাজ করবে
+        // পার্টিকেল জেনারেটর
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+                particle.style.animationDelay = Math.random() * -20 + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ট্যাব সুইচ
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // সিঙ্ক ফাংশন
         function sync() {
             document.getElementById('h-text').innerText = document.getElementById('in-h').value;
             document.getElementById('d-text').innerText = document.getElementById('in-d').value;
@@ -335,16 +1206,259 @@
             document.getElementById('web-text').innerText = document.getElementById('in-web').value;
             document.getElementById('social-text').innerText = document.getElementById('in-social').value;
             document.getElementById('bg-layer').style.backgroundColor = document.getElementById('in-bg').value;
+            
             const mode = document.getElementById('in-mode').value;
             const img = document.getElementById('m-img');
             img.className = mode;
+        }
+
+        // নতুন ফিচার ফাংশন
+        function updateFontSize() {
+            const size = document.getElementById('font-size').value;
+            document.getElementById('font-size-value').textContent = size + 'px';
+            document.getElementById('h-text').style.fontSize = size + 'px';
+        }
+
+        function updateHeadlineColor() {
+            const color = document.getElementById('headline-color').value;
+            document.getElementById('headlineBox').style.backgroundColor = color;
+        }
+
+        function updateBrandColor() {
+            const color = document.getElementById('brand-color').value;
+            document.getElementById('brandStrip').style.backgroundColor = color;
+        }
+
+        function applyFilter(filter) {
+            const img = document.getElementById('m-img');
+            img.className = document.getElementById('in-mode').value;
+            if (filter !== 'normal') {
+                img.classList.add(filter);
+            }
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function rotateImage() {
+            const rotation = document.getElementById('rotation').value;
+            const img = document.getElementById('m-img');
+            img.style.transform = `rotate(${rotation}deg)`;
+        }
+
+        function zoomImage() {
+            const zoom = document.getElementById('zoom').value;
+            document.getElementById('zoom-value').textContent = zoom + '%';
+            const img = document.getElementById('m-img');
+            img.style.transform = `scale(${zoom/100})`;
+        }
+
+        function updateWatermark() {
+            const text = document.getElementById('watermark-text').value;
+            const opacity = document.getElementById('watermark-opacity').value;
+            document.getElementById('watermark-opacity-value').textContent = opacity + '%';
+            const watermark = document.getElementById('watermark');
+            watermark.textContent = text;
+            watermark.style.opacity = opacity / 100;
+            watermark.style.display = text ? 'flex' : 'none';
+        }
+
+        function toggleBreakingBadge() {
+            const value = document.getElementById('breaking-badge').value;
+            const badge = document.getElementById('breakingBadge');
+            if (value === 'none') {
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'block';
+                badge.textContent = value === 'breaking' ? '🚨 BREAKING NEWS' : 
+                                   value === 'exclusive' ? '⭐ EXCLUSIVE' : '⚠️ ALERT';
+            }
+        }
+
+        function toggleLiveTag() {
+            const value = document.getElementById('live-tag').value;
+            const tag = document.getElementById('liveTag');
+            if (value === 'none') {
+                tag.style.display = 'none';
+            } else {
+                tag.style.display = 'block';
+                tag.textContent = value === 'live' ? '🔴 LIVE' : 
+                                 value === 'recording' ? '⏺️ RECORDING' : '📡 STREAMING';
+            }
+        }
+
+        function applyTextShadow() {
+            const value = document.getElementById('text-shadow').value;
+            const text = document.getElementById('h-text');
+            if (value === 'none') text.style.textShadow = 'none';
+            else if (value === 'soft') text.style.textShadow = '2px 2px 4px rgba(0,0,0,0.3)';
+            else if (value === 'hard') text.style.textShadow = '3px 3px 0 rgba(0,0,0,0.5)';
+            else if (value === 'glow') text.style.textShadow = '0 0 10px rgba(255,255,255,0.8)';
+        }
+
+        function applyBorderStyle() {
+            const value = document.getElementById('border-style').value;
+            const card = document.getElementById('news-card');
+            if (value === 'none') card.style.border = 'none';
+            else if (value === 'solid') card.style.border = '5px solid #ff006e';
+            else if (value === 'double') card.style.border = '8px double #ffbe0b';
+            else if (value === 'glow') card.style.boxShadow = '0 0 30px rgba(255,0,110,0.5)';
+        }
+
+        function updateViewCount() {
+            const count = document.getElementById('view-count').value;
+            const counter = document.getElementById('viewCounter');
+            if (count) {
+                counter.style.display = 'block';
+                counter.innerHTML = `👁️ ${count}`;
+            } else {
+                counter.style.display = 'none';
+            }
+        }
+
+        function updateCategory() {
+            const category = document.getElementById('category-tag').value;
+            const location = document.getElementById('location').value;
+            let extraText = '';
+            if (category) extraText += `🏷️ ${category}`;
+            if (location) extraText += (extraText ? ' | ' : '') + `📍 ${location}`;
+            document.getElementById('extra-info').innerHTML = extraText;
+        }
+
+        function updateLocation() {
+            updateCategory();
+        }
+
+        function applyTemplate(type) {
+            if (type === 'breaking') {
+                document.getElementById('breaking-badge').value = 'breaking';
+                toggleBreakingBadge();
+                document.getElementById('in-h').value = '🚨 ব্রেকিং: MCV সাইবার যোদ্ধা নতুন রেকর্ড';
+            } else if (type === 'live') {
+                document.getElementById('live-tag').value = 'live';
+                toggleLiveTag();
+                document.getElementById('in-h').value = '🔴 LIVE: MCV সরাসরি সম্প্রচার';
+            } else if (type === 'exclusive') {
+                document.getElementById('breaking-badge').value = 'exclusive';
+                toggleBreakingBadge();
+                document.getElementById('in-h').value = '⭐ এক্সক্লুসিভ: MCV স্পেশাল রিপোর্ট';
+            }
+            sync();
+        }
+
+        function resetAll() {
+            location.reload();
+        }
+
+        // শেয়ার লিংক জেনারেট
+        function generateShareLink() {
+            const card = document.getElementById('news-card');
+            
+            html2canvas(card, {
+                scale: 1.5,
+                backgroundColor: '#ffffff',
+                allowTaint: false,
+                useCORS: true
+            }).then(canvas => {
+                const imageData = canvas.toDataURL('image/png');
+                
+                // কার্ড ডাটা সেভ করুন
+                const cardData = {
+                    headline: document.getElementById('in-h').value,
+                    date: document.getElementById('in-d').value,
+                    image: imageData,
+                    timestamp: Date.now()
+                };
+                
+                // ইউনিক আইডি জেনারেট
+                const uniqueId = 'mcv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // লোকাল স্টোরেজে সেভ
+                localStorage.setItem(uniqueId, JSON.stringify(cardData));
+                
+                // শেয়ার লিংক তৈরি
+                const shareUrl = window.location.href.split('?')[0] + '?view=' + uniqueId;
+                
+                // লিংক দেখান
+                document.getElementById('shareLinkInput').value = shareUrl;
+                document.getElementById('shareLinkContainer').style.display = 'block';
+                
+                showNotification('✅ শেয়ার লিংক তৈরি হয়েছে!');
+            });
+        }
+
+        // শেয়ার লিংক কপি
+        function copyShareLink() {
+            const input = document.getElementById('shareLinkInput');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            showNotification('📋 লিংক কপি হয়েছে!');
+        }
+
+        // শেয়ার করা কার্ড লোড
+        function loadSharedCard() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewId = urlParams.get('view');
+            
+            if (viewId) {
+                const cardData = localStorage.getItem(viewId);
+                if (cardData) {
+                    const data = JSON.parse(cardData);
+                    
+                    // ইমেজ লোড
+                    const img = document.getElementById('m-img');
+                    img.src = data.image;
+                    img.style.display = 'block';
+                    
+                    // হেডলাইন লোড
+                    document.getElementById('in-h').value = data.headline;
+                    document.getElementById('in-d').value = data.date;
+                    
+                    sync();
+                    
+                    // এডিটর হাইড
+                    document.querySelector('.editor-card').style.display = 'none';
+                    document.querySelector('.quick-actions').style.display = 'none';
+                    document.querySelector('.feature-tabs').style.display = 'none';
+                    document.querySelector('.action-buttons').style.display = 'none';
+                    
+                    showNotification('📰 শেয়ার করা নিউজ লোড হয়েছে!');
+                }
+            }
+        }
+
+        function copyToClipboard() {
+            html2canvas(document.getElementById('news-card'), {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                canvas.toBlob(blob => {
+                    navigator.clipboard.write([
+                        new ClipboardItem({'image/png': blob})
+                    ]);
+                    showNotification('✅ নিউজ কার্ড কপি হয়েছে!');
+                });
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
         function loadM(e) {
             const r = new FileReader();
             r.onload = () => {
                 const i = document.getElementById('m-img');
-                i.src = r.result; i.style.display = "block"; sync();
+                i.src = r.result; 
+                i.style.display = "block"; 
+                sync();
             }
             if(e.target.files[0]) r.readAsDataURL(e.target.files[0]);
         }
@@ -353,29 +1467,41 @@
             const r = new FileReader();
             r.onload = () => {
                 const i = document.getElementById('f-img');
-                i.src = r.result; i.style.display = "block";
+                i.src = r.result; 
+                i.style.display = "block";
             }
             if(e.target.files[0]) r.readAsDataURL(e.target.files[0]);
         }
 
         function download4K() {
             const card = document.getElementById('news-card');
-            const btn = document.querySelector('.save-btn');
-            btn.innerText = "প্রসেসিং হচ্ছে...";
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ প্রসেসিং...';
             
             html2canvas(card, { 
-                scale: 3,
+                scale: 3.5,
                 useCORS: true,
                 logging: false,
-                backgroundColor: null 
+                backgroundColor: '#ffffff',
+                allowTaint: false
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'News_MCV.png';
-                link.href = canvas.toDataURL('image/png');
+                link.download = 'MCV_News_Ultra.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
                 link.click();
-                btn.innerText = "সরাসরি ৪কে সেভ করুন";
+                btn.innerHTML = originalText;
+                showNotification('💾 ৪কে ইমেজ সেভ হয়েছে!');
+            }).catch(err => {
+                btn.innerHTML = originalText;
+                alert('ছবি সেভ করতে সমস্যা হয়েছে!');
             });
         }
+
+        window.onload = () => {
+            sync();
+            loadSharedCard();
+        };
     </script>
 </body>
-                    </html>
+    </html>
