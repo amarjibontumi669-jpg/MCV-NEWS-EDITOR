@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCV - NEWS Editor</title>
+    <title>MCV - Mobile Editor</title>
     <!-- ফেভিকন লোগো (আপনার দেওয়া লিংক) -->
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co/whDmHvKd/1000021541.jpg">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -12,29 +12,31 @@
 
         body {
             font-family: 'Hind Siliguri', sans-serif;
-            /* প্রিমিয়াম UI/UX ব্যাকগ্রাউন্ড: গ্রেডিয়েন্ট (কোডের অন্য কিছুতে হাত দেওয়া হয়নি) */
-            background: linear-gradient(145deg, #cfd9df 0%, #e2ebf0 100%);
+            /* নতুন প্রিমিয়াম ব্যাকগ্রাউন্ড কালার */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             margin: 0;
             padding: 10px;
-            padding-bottom: 30px; /* নিচের ফুটার স্পেসের জন্য */
+            padding-bottom: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
-        /* --- Editor Tools (মোবাইলের জন্য অ্যাডজাস্টেড) --- */
+        /* --- Editor Tools (নতুন কালার স্কিম) --- */
         .tools-container {
-            background: #fff;
+            background: linear-gradient(145deg, #2d2d44 0%, #1e1e2f 100%);
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
             width: 100%;
-            max-width: 550px; /* ডেক্সটপেও যেন অতিরিক্ত বড় না হয় */
+            max-width: 550px;
             margin-bottom: 20px;
             display: grid;
-            grid-template-columns: 1fr; /* মোবাইলে সব এক লাইনে থাকবে */
+            grid-template-columns: 1fr;
             gap: 12px;
             box-sizing: border-box;
+            border: 1px solid #3a3a5a;
         }
 
         /* ট্যাবলেট বা বড় স্ক্রিনের জন্য ২ কলাম */
@@ -47,34 +49,55 @@
         .tools-container h2 { 
             grid-column: 1 / -1; 
             margin: 0; 
-            color: #b30000; 
+            color: #ff6b6b; 
             text-align: center; 
             font-size: 1.2rem;
+            text-shadow: 0 2px 10px rgba(255,107,107,0.3);
+            letter-spacing: 2px;
         }
 
         .input-group { display: flex; flex-direction: column; }
-        label { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #57606f; }
+        label { 
+            font-size: 12px; 
+            font-weight: bold; 
+            margin-bottom: 4px; 
+            color: #a8b2d1; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         input, textarea, select { 
-            padding: 8px; 
-            border: 1px solid #ced4da; 
-            border-radius: 6px; 
+            padding: 10px; 
+            border: 1px solid #3a3a5a; 
+            border-radius: 8px; 
             font-family: inherit;
             font-size: 14px;
+            background: #1a1a2e;
+            color: #e0e0ff;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255,107,107,0.2);
+        }
+        input::placeholder, textarea::placeholder {
+            color: #6a6a8a;
         }
 
-        /* --- News Card (পুরো স্ক্রিন জুড়ে থাকবে) --- */
+        /* --- News Card (পুরো স্ক্রিন জুড়ে থাকবে - অপরিবর্তিত) --- */
         #news-card {
             width: 100%;
-            max-width: 550px; /* মূল ডিজাইনের উইডথ বজায় রাখা হলো */
+            max-width: 550px;
             background-color: #ffffff;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,107,107,0.2);
+            border-radius: 8px 8px 0 0;
         }
 
         .main-photo {
-            height: 300px; /* মোবাইলে উচ্চতা কিছুটা কমানো হয়েছে */
+            height: 300px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -95,7 +118,7 @@
             color: #fff;
             padding: 10px;
             display: flex;
-            flex-wrap: wrap; /* ছোট ফোনে লেখাগুলো নিচে নামবে */
+            flex-wrap: wrap;
             justify-content: space-between;
             font-size: 11px;
             gap: 5px;
@@ -114,47 +137,56 @@
 
         .footer-info { color: #005a32; font-size: 12px; line-height: 1.2; flex: 1; }
 
-        /* Save Button */
+        /* Save Button - নতুন কালার */
         .save-btn {
             margin: 20px 0;
             width: 100%;
             max-width: 550px;
-            padding: 15px;
-            background: #27ae60;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
             color: #fff;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 8px 20px rgba(238,90,36,0.4), inset 0 1px 1px rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(238,90,36,0.5);
         }
 
-        /* --- নতুন সংযোজন: ডেভেলপার ক্রেডিট ও টেলিগ্রাম সেকশন (কার্ডের বাইরে) --- */
+        /* --- ডেভেলপার ক্রেডিট ও টেলিগ্রাম সেকশন (নতুন কালার) --- */
         .dev-footer {
             width: 100%;
             max-width: 550px;
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .dev-credit {
-            font-size: 14px;
-            color: #2d3436;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 8px 16px;
+            font-size: 15px;
+            color: #e0e0ff;
+            font-weight: 600;
+            background: rgba(45,45,68,0.8);
+            padding: 10px 20px;
             border-radius: 30px;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #4a4a6a;
         }
 
         .dev-credit i {
-            color: #e84118;
+            color: #ff6b6b;
             margin-right: 5px;
         }
 
@@ -162,28 +194,30 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            background: #0088cc;
+            gap: 10px;
+            background: linear-gradient(135deg, #0088cc 0%, #005f8c 100%);
             color: white;
             text-decoration: none;
-            padding: 10px 24px;
+            padding: 12px 28px;
             border-radius: 40px;
             font-weight: bold;
             font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0, 136, 204, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 20px rgba(0,136,204,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .telegram-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 136, 204, 0.4);
-            background: #0099e6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,136,204,0.6);
+            background: linear-gradient(135deg, #0099e6 0%, #006699 100%);
         }
 
         .telegram-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: white;
         }
     </style>
@@ -191,7 +225,7 @@
 <body>
 
     <div class="tools-container">
-        <h2>MCV NEWS EDITOR</h2>
+        <h2>⚡ MCV NEWS EDITOR ⚡</h2>
         
         <div class="input-group" style="grid-column: 1 / -1;">
             <label>হেডলাইন:</label>
@@ -277,10 +311,10 @@
 
     <button class="save-btn" onclick="download4K()">সরাসরি ৪কে সেভ করুন</button>
 
-    <!-- নতুন অংশ: ডেভেলপার ক্রেডিট এবং টেলিগ্রাম জয়েন বাটন -->
+    <!-- ডেভেলপার ক্রেডিট এবং টেলিগ্রাম জয়েন বাটন -->
     <div class="dev-footer">
         <div class="dev-credit">
-            <i>⚡</i> ডেভেলপার: Black Herix <i>⚡</i>
+            <i>🔥</i> ডেভেলপার: Black Herix <i>🔥</i>
         </div>
         <a href="https://t.me/+VsN_05q2cUJmNDA9" target="_blank" class="telegram-btn">
             <svg viewBox="0 0 24 24" width="24" height="24">
@@ -330,7 +364,7 @@
             btn.innerText = "প্রসেসিং হচ্ছে...";
             
             html2canvas(card, { 
-                scale: 3, // মোবাইলে ৩ স্কেল ই যথেষ্ট (প্রায় ১৬০০+ পিক্সেল হবে)
+                scale: 3,
                 useCORS: true,
                 logging: false,
                 backgroundColor: null 
@@ -344,4 +378,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
